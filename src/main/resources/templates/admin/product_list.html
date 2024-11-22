@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang quản lý sản phẩm</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Căn chỉnh toàn bộ nội dung */
+        .content-container {
+            margin-top: 100px;
+        }
+        .buttons-container {
+            display: flex;
+            gap: 10px; /* Khoảng cách giữa các nút */
+            margin-bottom: 20px; /* Khoảng cách giữa nút và bảng */
+        }
+        .table-container {
+            width: 100%; /* Chiều rộng của bảng */
+            max-width: 1200px; /* Giới hạn chiều rộng bảng */
+        }
+        /* Hạn chế độ rộng cột mô tả */
+        .table td {
+            white-space: nowrap; /* Không cho xuống dòng */
+            overflow: hidden; /* Ẩn phần tràn */
+            text-overflow: ellipsis; /* Hiển thị dấu chấm chấm (...) */
+            max-width: 200px; /* Giới hạn độ rộng (tùy chỉnh) */
+        }
+
+        /* Giới hạn độ rộng cho toàn bảng */
+        .table-container {
+            overflow-x: auto; /* Thêm thanh cuộn ngang nếu cần */
+        }
+
+    </style>
+</head>
+<body>
+<div class="container content-container">
+    <!-- Nhóm nút Thêm mới và Trang mua hàng -->
+    <div class="buttons-container">
+        <a href="/products/new" class="btn btn-primary">Thêm mới</a>
+        <a href="/products/cards" class="btn btn-info">Trang mua hàng</a>
+        <div class="search-bar mb-3">
+            <form action="/products" method="get" class="form-inline">
+                <input type="text" name="keyword" class="form-control mr-2" placeholder="Tìm kiếm sản phẩm..."
+                       th:value="${keyword}">
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bảng sản phẩm -->
+    <div class="table-container">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Số thứ tự</th>
+                <th>Tên sản phẩm</th>
+                <th>Danh mục</th>
+                <th>Hình ảnh</th>
+                <th>Mô tả</th>
+                <th>Số lượng</th>
+                <th>Giá cũ</th>
+                <th>Giá mới</th>
+                <th>Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.id}"></td>
+                <td th:text="${product.productName}"></td>
+                <td th:text="${product.category != null ? product.category.name : 'No Category'}"></td>
+
+                <td>
+                    <img th:src="@{'/uploads/' + ${product.imageUrl}}" alt="Product Image" style="width: 100px; height: auto;">
+                </td>
+                <td th:text="${product.description}" th:attr="title=${product.description}"></td>
+
+
+                <td th:text="${product.quantity}"></td>
+                <td th:text="${product.oldPrice}"></td>
+                <td th:text="${product.newPrice}"></td>
+                <td>
+                    <a th:href="@{'/products/edit/' + ${product.id}}" class="btn btn-warning btn-sm">Sửa</a>
+                    <a th:href="@{'/products/delete/' + ${product.id}}" class="btn btn-danger btn-sm">Xóa</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Phân trang -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <!-- Nút Previous -->
+            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                <a class="page-link"
+                   th:href="@{/products(page=${currentPage - 1}, keyword=${keyword})}"
+                   th:text="'Previous'"></a>
+            </li>
+
+            <!-- Nút số trang -->
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage ? 'active' : ''}">
+                <a class="page-link"
+                   th:href="@{/products(page=${i}, keyword=${keyword})}"
+                   th:text="${i + 1}"></a>
+            </li>
+
+            <!-- Nút Next -->
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                <a class="page-link"
+                   th:href="@{/products(page=${currentPage + 1}, keyword=${keyword})}"
+                   th:text="'Next'"></a>
+            </li>
+
+        </ul>
+    </nav>
+</div>
+<!-- Toast -->
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"
+             th:if="${toastMessage}" th:classappend="${toastType == 'error' ? 'bg-danger' : 'bg-success'}">
+            <div class="d-flex">
+                <div class="toast-body" th:text="${toastMessage}">Success or Error Message Here</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Hiển thị toast khi tải trang
+    document.addEventListener('DOMContentLoaded', function () {
+        const toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        const toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl);
+        });
+        toastList.forEach(toast => toast.show());
+    });
+</script>
+</body>
+</html>

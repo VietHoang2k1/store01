@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoàng Shop | Online mua ngay</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <style>
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-card {
+            width: 100%;
+            max-width: 236px;
+            height: auto;
+            margin: 10px auto;
+        }
+
+        .product-card .card-img-top {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-img-top {
+            margin-top: 8px;
+        }
+
+        .card-body {
+            text-align: center;
+        }
+
+        .product-card {
+            border-radius: 10px;
+        }
+
+        .row-product {
+            display: flex;
+            flex-wrap: wrap; /* Cho phép xuống hàng nếu không đủ không gian */
+            justify-content: space-between; /* Căn đều các sản phẩm */
+            gap: 20px; /* Tăng khoảng cách giữa các sản phẩm */
+        }
+
+        .container {
+            max-width: 100%; /* Điều chỉnh chiều rộng tối đa của container */
+            margin: auto;
+        }
+
+        .row-product > .product-card {
+            flex: 1 1 calc(20% - 20px); /* Duy trì 5 sản phẩm trên một hàng */
+        }
+
+        /* Ẩn thanh cuộn ngang */
+        .row-product::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Header */
+        .header-container {
+            background-color: #f8f9fa; /* Màu nền sáng */
+            border-bottom: 1px solid #ddd; /* Đường viền dưới */
+            padding: 10px 0; /* Khoảng cách trên/dưới */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+        }
+
+        .header-logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .header-logo:hover {
+            color: #0056b3; /* Hiệu ứng hover */
+        }
+
+        .search-bar input {
+            width: 300px; /* Chiều rộng input */
+            border-radius: 20px; /* Bo tròn */
+            padding: 10px 15px; /* Khoảng cách trong */
+            border: 1px solid #ccc; /* Viền input */
+            font-size: 0.9rem; /* Kích thước chữ */
+        }
+
+        .search-bar button {
+            border-radius: 20px; /* Bo tròn nút */
+            padding: 8px 20px; /* Khoảng cách trong nút */
+            font-size: 0.9rem; /* Kích thước chữ */
+        }
+
+        .menu .btn {
+            font-size: 0.9rem; /* Kích thước chữ */
+            font-weight: 500;
+            color: #555;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .menu .btn:hover {
+            color: #007bff;
+            background-color: #f1f1f1;
+            text-decoration: none;
+        }
+        /* Đảm bảo các dropdown được đặt ở vị trí riêng biệt */
+        .dropdown-menu {
+            z-index: 1050; /* Giữ dropdown luôn ở phía trên */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng bóng */
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block; /* Giữ menu hiển thị khi hover */
+        }
+
+        .dropdown-menu-right {
+            right: 0;
+            left: auto;
+        }
+
+        /* Khoảng cách giữa các dropdown */
+        .ml-4 {
+            margin-left: 1.5rem !important;
+        }
+
+        .social-icons a {
+            font-size: 1.2rem; /* Kích thước icon */
+            margin: 0 10px; /* Khoảng cách giữa các icon */
+            color: #555;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #007bff; /* Hiệu ứng hover */
+        }
+
+        .btn-outline-primary {
+            border-radius: 20px; /* Bo tròn nút đăng nhập */
+            padding: 8px 15px; /* Khoảng cách trong nút */
+            font-size: 0.9rem;
+        }
+        .card-footer {
+            background: none; /* Xóa nền */
+            border: none; /* Xóa viền */
+            display: flex; /* Sử dụng flex để căn chỉnh */
+            justify-content: space-between; /* Đưa các nút sang hai bên */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            padding: 10px 0; /* Thêm khoảng cách trên/dưới */
+        }
+
+        .card-footer .btn {
+            border-radius: 15px; /* Bo tròn vừa phải */
+            padding: 4px 10px; /* Giảm padding để thu nhỏ kích thước */
+            font-size: 0.8rem; /* Giảm kích thước chữ */
+            transition: all 0.3s ease; /* Hiệu ứng hover */
+        }
+
+        .card-footer .btn-outline-primary {
+            border: 1px solid #007bff; /* Viền nút "Xem chi tiết" */
+            color: #007bff; /* Màu chữ */
+        }
+
+        .card-footer .btn-outline-primary:hover {
+            background-color: #007bff; /* Màu nền khi hover */
+            color: white; /* Màu chữ khi hover */
+        }
+
+        .card-footer .btn-primary {
+            background-color: #007bff; /* Màu nền nút "Mua ngay" */
+            color: white; /* Màu chữ */
+        }
+
+        .card-footer .btn-primary:hover {
+            background-color: #0056b3; /* Màu nền khi hover */
+        }
+
+        .carousel-item img {
+            height: 400px;
+            object-fit: cover;
+        }
+        .hidden {
+            display: none;
+        }
+        .categories {
+            margin-bottom: 20px;
+        }
+
+        #category-list {
+            overflow: hidden; /* Giới hạn danh sách danh mục */
+        }
+        #category-list {
+            transition: max-height 0.3s ease-in-out;
+        }
+
+        .category-expanded #category-list {
+            max-height: none; /* Hiển thị đầy đủ danh mục khi mở rộng */
+        }
+    </style>
+</head>
+<body>
+<div class="header-container">
+    <div class="header d-flex justify-content-between align-items-center px-4">
+        <!-- Logo -->
+        <a href="#" class="header-logo text-primary font-weight-bold">Hoàng Shop</a>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <form action="/products/cards" method="get" class="form-inline">
+                <input type="text" name="keyword" class="form-control mr-2" placeholder="Tìm kiếm sản phẩm..."
+                       th:value="${keyword}">
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </form>
+        </div>
+        <div class="menu d-flex align-items-center">
+            <!-- Dropdown Liên hệ -->
+            <div class="dropdown">
+                <a class="btn btn-link dropdown-toggle text-dark" href="#" id="contactDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Liên hệ
+                </a>
+                <div class="dropdown-menu" aria-labelledby="contactDropdown">
+                    <a href="tel:0356253816" class="dropdown-item">Số điện thoại: 0356253816</a>
+                    <a href="mailto:viethoangnguyen217@gmail.com" class="dropdown-item">Email: viethoangnguyen217@gmail.com</a>
+                    <a href="#" class="dropdown-item">155 Ng. Quan Thổ 1, Chợ Dừa, Đống Đa, Hà Nội, Việt Nam</a>
+                </div>
+            </div>
+
+            <!-- Dropdown Giỏ hàng -->
+            <div class="dropdown ml-4">
+                <a class="btn btn-link dropdown-toggle text-dark" href="#" id="cartDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Giỏ hàng <span th:text="${session.cart != null ? session.cart.size() : 0}">0</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cartDropdown">
+                    <ul class="list-unstyled mb-2">
+                        <!-- Kiểm tra nếu giỏ hàng có sản phẩm -->
+                        <li th:if="${session.cart != null}" th:each="product : ${session.cart}">
+                            <div class="dropdown-item d-flex justify-content-between align-items-center">
+                                <span th:text="${product.productName}">Tên sản phẩm</span>
+                                <span th:text="${#numbers.formatInteger(product.newPrice, 1)} + ' VND'">Giá</span>
+                            </div>
+                        </li>
+                        <!-- Hiển thị nếu giỏ hàng trống -->
+                        <li th:if="${session.cart == null or session.cart.isEmpty()}">
+                            <div class="dropdown-item text-muted">Giỏ hàng trống</div>
+                        </li>
+                    </ul>
+                    <div class="dropdown-divider"></div>
+                    <a href="/products/checkout" class="btn btn-primary btn-block">Thanh toán</a>
+                </div>
+            </div>
+        </div>
+        <div class="ml-4">
+            <a href="/login" class="btn btn-outline-primary rounded-pill">Đăng nhập</a>
+        </div>
+    </div>
+</div>
+<div id="productCarousel" class="carousel slide my-4" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#productCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#productCarousel" data-slide-to="1"></li>
+        <li data-target="#productCarousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="../../../../../uploads/20.11 Sale.png" class="d-block w-100" alt="Slide 1">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Sản phẩm nổi bật</h5>
+                <p>Khuyến mãi hấp dẫn chỉ có tại Hoàng Shop!</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="../../../../../uploads/banner.png" class="d-block w-100" alt="Slide 2">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Bộ sưu tập mới</h5>
+                <p>Thời trang đẳng cấp, phong cách hiện đại.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="../../../../../uploads/Blue Purple Modern Gradient We're Launching Exclusive Phone Banner.png" class="d-block w-100" alt="Slide 3">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Ưu đãi đặc biệt</h5>
+                <p>Giảm giá tới 50% cho các sản phẩm hot!</p>
+            </div>
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#productCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#productCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<div class="container my-4">
+    <!-- Danh sách danh mục -->
+    <div class="categories">
+        <div class="d-flex flex-wrap">
+            <!-- Nút hiển thị tất cả -->
+            <a href="/products/cards" class="btn btn-outline-primary mr-2 mb-2">
+                Tất cả
+            </a>
+        <div class="d-flex flex-wrap">
+            <!-- Danh mục hiển thị chính -->
+            <a th:each="category, iterStat : ${categories}"
+               th:if="${iterStat.index < 5}"
+               th:href="@{/products/cards(categoryId=${category.id})}"
+               class="btn btn-outline-primary mr-2 mb-2"
+               th:text="${category.name}">
+            </a>
+            <!-- Dropdown danh mục ẩn -->
+            <div class="dropdown categories-dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle mr-2 mb-2" type="button" id="categoriesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Xem thêm
+                </button>
+                <div class="dropdown-menu" aria-labelledby="categoriesDropdown">
+                    <a th:each="category, iterStat : ${categories}"
+                       th:if="${iterStat.index >= 5}"
+                       th:href="@{/products/cards(categoryId=${category.id})}"
+                       class="dropdown-item"
+                       th:text="${category.name}">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 d-flex justify-content-center animate__animated animate__fadeInUp" th:each="product : ${products}">
+            <div class="card product-card">
+                <img class="card-img-top" th:src="@{'/uploads/' + ${product.imageUrl}}" alt="Product Image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${product.productName}">Tên sản phẩm</h5>
+                    <p class="text-muted">
+                        <span th:text="${#numbers.formatInteger(product.oldPrice, 1) + ' đ'}" style="text-decoration: line-through;">Giá cũ</span>
+                        <span class="text-danger font-weight-bold" th:text="${#numbers.formatInteger(product.newPrice, 1) + ' đ'}">Giá mới</span>
+                    </p>
+                    <div class="d-flex justify-content-between">
+                        <div class="card-footer">
+                            <a th:href="@{'/products/' + ${product.id}}" class="btn btn-outline-primary">Xem chi tiết</a>
+                            <form th:action="@{/products/add-to-cart/{productId}(productId=${product.id})}" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-primary">Mua ngay</button>
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/products/cards?page=' + (${currentPage - 1}) + '&keyword=' + ${keyword}}"
+               th:text="'Previous'"></a>
+        </li>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            th:classappend="${i == currentPage ? 'active' : ''}">
+            <a class="page-link" th:href="@{'/products/cards?page=' + ${i} + '&keyword=' + ${keyword}}"
+               th:text="${i + 1}"></a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/products/cards?page=' + (${currentPage + 1}) + '&keyword=' + ${keyword}}"
+               th:text="'Next'"></a>
+        </li>
+
+    </ul>
+</nav>
+<!-- Toast -->
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true"
+             th:if="${toastMessage}" th:classappend="${toastType == 'error' ? 'bg-danger' : 'bg-success'}">
+            <div class="d-flex">
+                <div class="toast-body" th:text="${toastMessage}">Success or Error Message Here</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-light text-dark pt-4">
+    <div class="container">
+        <div class="row">
+            <!-- Cột 1: Thông tin liên hệ -->
+            <div class="col-md-4 col-sm-12">
+                <h5 class="font-weight-bold mb-3">Hoàng Shop</h5>
+                <p>Địa chỉ: 155 Ng. Quan Thổ 1, Chợ Dừa, Đống Đa, Hà Nội, Việt Nam</p>
+                <p>Điện thoại: <a href="tel:0356253816" class="text-dark">0356 253 816</a></p>
+                <p>Email: <a href="mailto:viethoangnguyen217@gmail.com" class="text-dark">viethoangnguyen217@gmail.com</a></p>
+                <p>Giờ làm việc ca sáng: 8:00 - 21:00 (Hàng ngày)</p>
+                <p>Giờ làm việc ca đêm: 22:00 - 6:00 (Trừ chủ nhật)</p>
+                <p>Với ca đêm chúng tôi chỉ ship đồ ăn đêm</p>
+            </div>
+            <!-- Cột 2: Dịch vụ -->
+            <div class="col-md-4 col-sm-12">
+                <h5 class="font-weight-bold mb-3">Dịch vụ</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-dark">Chính sách bảo hành</a></li>
+                    <li><a href="#" class="text-dark">Chính sách đổi trả</a></li>
+                    <li><a href="#" class="text-dark">Chính sách vận chuyển</a></li>
+                    <li><a href="#" class="text-dark">Hướng dẫn mua hàng</a></li>
+                </ul>
+            </div>
+            <!-- Cột 3: Mạng xã hội -->
+            <div class="col-md-4 col-sm-12">
+                <h5 class="font-weight-bold mb-3">Kết nối với chúng tôi</h5>
+                <p>Theo dõi Hoàng Shop trên mạng xã hội:</p>
+                <div class="d-flex">
+                    <a href="https://facebook.com" class="text-dark mr-3" target="_blank"><i class="fab fa-facebook fa-2x"></i></a>
+                    <a href="https://instagram.com" class="text-dark mr-3" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="mb-0">&copy; 2024 Hoàng Shop. Bản quyền thuộc về Hoàng Shop.</p>
+                <p>Thiết kế bởi <a href="#" class="text-dark">Đội ngũ Hoàng Shop</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+<div class="container-fluid my-4">
+    <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.2208945941584!2d105.82650317352342!3d21.02384568795074!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab9d8008fb23%3A0xd4cc7febeb21596b!2zMTU1IE5nLiBRdWFuIFRo4buVIDEsIENo4bujIEThu6thLCDEkOG7kW5nIMSQYSwgSMOgIE7hu5lpLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1731748675288!5m2!1svi!2s"
+            width="100%"
+            height="300"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+</div>
+<script>
+    document.addEventListener('click', function (event) {
+        const contactDropdown = document.getElementById('contactDropdown');
+        const cartDropdown = document.getElementById('cartDropdown');
+
+        if (!event.target.closest('#contactDropdown') && !event.target.closest('.dropdown-menu')) {
+            contactDropdown.setAttribute('aria-expanded', 'false');
+            document.querySelector('[aria-labelledby="contactDropdown"]').classList.remove('show');
+        }
+
+        if (!event.target.closest('#cartDropdown') && !event.target.closest('.dropdown-menu')) {
+            cartDropdown.setAttribute('aria-expanded', 'false');
+            document.querySelector('[aria-labelledby="cartDropdown"]').classList.remove('show');
+        }
+    });
+    // Hiển thị toast khi tải trang
+    document.addEventListener('DOMContentLoaded', function () {
+        const toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        const toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl);
+        });
+        toastList.forEach(toast => toast.show());
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleButton = document.getElementById('toggle-categories');
+        const categoryList = document.getElementById('category-list');
+        let isExpanded = false;
+
+        toggleButton.addEventListener('click', function () {
+            isExpanded = !isExpanded;
+            if (isExpanded) {
+                categoryList.style.maxHeight = 'none'; // Mở rộng danh sách
+                toggleButton.textContent = 'Thu gọn';
+            } else {
+                categoryList.style.maxHeight = '60px'; // Giới hạn danh sách
+                toggleButton.textContent = 'Xem thêm';
+            }
+        });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

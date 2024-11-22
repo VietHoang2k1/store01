@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lịch sử đơn hàng</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Lịch sử đơn hàng</h1>
+    <ul class="list-group">
+        <li class="list-group-item" th:each="order : ${orders}">
+            Mã đơn hàng: <span th:text="${order.id}">Mã</span><br>
+            Ngày đặt: <span th:text="${order.date}">Ngày</span><br>
+            Tổng tiền: <span th:text="${order.total} + ' VND'">Tổng</span><br>
+            Trạng thái: <span th:text="${order.status}">Trạng thái</span><br>
+        </li>
+    </ul>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

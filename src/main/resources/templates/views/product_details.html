@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoàng Shop | Online mua ngay</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <style>
+
+        .header-container {
+            background-color: #f8f9fa; /* Màu nền sáng */
+            border-bottom: 1px solid #ddd; /* Đường viền dưới */
+            padding: 10px 0; /* Khoảng cách trên/dưới */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+        }
+
+        .header-logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .header-logo:hover {
+            color: #0056b3; /* Hiệu ứng hover */
+        }
+
+        .search-bar input {
+            width: 300px; /* Chiều rộng input */
+            border-radius: 20px; /* Bo tròn */
+            padding: 10px 15px; /* Khoảng cách trong */
+            border: 1px solid #ccc; /* Viền input */
+            font-size: 0.9rem; /* Kích thước chữ */
+        }
+
+        .search-bar button {
+            border-radius: 20px; /* Bo tròn nút */
+            padding: 8px 20px; /* Khoảng cách trong nút */
+            font-size: 0.9rem; /* Kích thước chữ */
+        }
+
+        .menu .btn {
+            font-size: 0.9rem; /* Kích thước chữ */
+            font-weight: 500;
+            color: #555;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .menu .btn:hover {
+            color: #007bff;
+            background-color: #f1f1f1;
+            text-decoration: none;
+        }
+        /* Đảm bảo các dropdown được đặt ở vị trí riêng biệt */
+        .dropdown-menu {
+            z-index: 1050; /* Giữ dropdown luôn ở phía trên */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng bóng */
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block; /* Giữ menu hiển thị khi hover */
+        }
+
+        .dropdown-menu-right {
+            right: 0;
+            left: auto;
+        }
+
+        /* Khoảng cách giữa các dropdown */
+        .ml-4 {
+            margin-left: 1.5rem !important;
+        }
+
+        .social-icons a {
+            font-size: 1.2rem; /* Kích thước icon */
+            margin: 0 10px; /* Khoảng cách giữa các icon */
+            color: #555;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #007bff; /* Hiệu ứng hover */
+        }
+
+        .btn-outline-primary {
+            border-radius: 20px; /* Bo tròn nút đăng nhập */
+            padding: 8px 15px; /* Khoảng cách trong nút */
+            font-size: 0.9rem;
+        }
+
+
+
+        .cart-login a {
+            text-decoration: none;
+            color: #555;
+            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .cart-login a:hover {
+            background-color: #f1f1f1;
+            color: #007bff;
+        }
+
+        .cart-login .login {
+            background-color: #007bff;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-login .login:hover {
+            background-color: #0056b3;
+        }
+        .card-footer {
+            border-top: none; /* Bỏ viền trên */
+            background-color: transparent; /* Loại bỏ nền */
+            padding: 10px 0; /* Điều chỉnh khoảng cách */
+            display: flex; /* Đặt các nút nằm trên một hàng */
+            justify-content: flex-start; /* Căn các nút về phía trái */
+            gap: 10px; /* Khoảng cách giữa các nút */
+        }
+
+        .card-footer .btn {
+            margin: 0; /* Bỏ margin */
+            padding: 5px 10px; /* Thu nhỏ nút */
+            font-size: 0.85rem; /* Giảm kích thước chữ */
+        }
+
+    </style>
+</head>
+<body>
+<div class="header-container">
+    <div class="header d-flex justify-content-between align-items-center px-4">
+        <!-- Logo -->
+        <a href="#" class="header-logo text-primary font-weight-bold">Hoàng Shop</a>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <form action="/products/cards" method="get" class="form-inline">
+                <input type="text" name="keyword" class="form-control mr-2" placeholder="Tìm kiếm sản phẩm..."
+                       th:value="${keyword}">
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </form>
+        </div>
+        <div class="menu d-flex align-items-center">
+            <!-- Dropdown Liên hệ -->
+            <div class="dropdown">
+                <a class="btn btn-link dropdown-toggle text-dark" href="#" id="contactDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Liên hệ
+                </a>
+                <div class="dropdown-menu" aria-labelledby="contactDropdown">
+                    <a href="tel:0356253816" class="dropdown-item">Số điện thoại: 0356253816</a>
+                    <a href="mailto:viethoangnguyen217@gmail.com" class="dropdown-item">Email: viethoangnguyen217@gmail.com</a>
+                    <a href="#" class="dropdown-item">155 Ng. Quan Thổ 1, Chợ Dừa, Đống Đa, Hà Nội, Việt Nam</a>
+                </div>
+            </div>
+
+            <!-- Dropdown Giỏ hàng -->
+            <div class="dropdown ml-4">
+                <a class="btn btn-link dropdown-toggle text-dark" href="#" id="cartDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Giỏ hàng <span th:text="${session.cart != null ? session.cart.size() : 0}">0</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cartDropdown">
+                    <ul class="list-unstyled mb-2">
+                        <!-- Kiểm tra nếu giỏ hàng có sản phẩm -->
+                        <li th:if="${session.cart != null}" th:each="product : ${session.cart}">
+                            <div class="dropdown-item d-flex justify-content-between align-items-center">
+                                <span th:text="${product.productName}">Tên sản phẩm</span>
+                                <span th:text="${#numbers.formatInteger(product.newPrice, 1)} + ' VND'">Giá</span>
+                            </div>
+                        </li>
+                        <!-- Hiển thị nếu giỏ hàng trống -->
+                        <li th:if="${session.cart == null or session.cart.isEmpty()}">
+                            <div class="dropdown-item text-muted">Giỏ hàng trống</div>
+                        </li>
+                    </ul>
+                    <div class="dropdown-divider"></div>
+                    <a href="/products/checkout" class="btn btn-primary btn-block">Thanh toán</a>
+                </div>
+            </div>
+        </div>
+        <div class="ml-4">
+            <a href="/login" class="btn btn-outline-primary rounded-pill">Đăng nhập</a>
+        </div>
+    </div>
+</div>
+<div class="container my-4">
+    <div class="card">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <img th:src="@{'/uploads/' + ${product.imageUrl}}" class="card-img" alt="Product Image" style="height: 90%; object-fit: cover;margin-top: 8px">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title" th:text="${product.productName}">Tên sản phẩm</h3>
+                    <p class="text-muted">
+                        <span>Giá cũ: </span>
+                        <span th:text="${#numbers.formatInteger(product.oldPrice, 1)+ ' đ'}" style="text-decoration: line-through;">Giá cũ</span>
+
+                        <span class="text-danger font-weight-bold ml-3">Giá mới: </span>
+                        <span th:text="${#numbers.formatInteger(product.newPrice, 1)+ ' đ'}">Giá mới</span>
+                    </p>
+                    <h5 class="mt-3">Mô tả sản phẩm:</h5>
+                    <p class="card-text" th:text="${product.description}">Mô tả</p>
+                    <h6 class="mt-3">Danh mục sản phẩm:</h6>
+                    <p class="text-primary font-weight-bold" th:text="${product.category != null ? product.category.name : 'Không có danh mục'}">
+                        Danh mục sản phẩm
+                    </p>
+                    <div class="card-footer">
+                        <a href="/products/cards" class="btn btn-secondary btn-sm">Quay lại</a>
+                        <form th:action="@{/products/add-to-cart/{productId}(productId=${product.id})}" method="post" class="add-to-cart-form">
+                            <button type="submit" class="btn btn-primary btn-sm">Mua ngay</button>
+                        </form>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </div>
+</div>
+<footer class="bg-light text-dark pt-4">
+    <div class="container">
+        <div class="row">
+            <!-- Cột 1: Thông tin liên hệ -->
+            <div class="col-md-4 col-sm-12">
+                <h5 class="font-weight-bold mb-3">Hoàng Shop</h5>
+                <p>Địa chỉ: 155 Ng. Quan Thổ 1, Chợ Dừa, Đống Đa, Hà Nội, Việt Nam</p>
+                <p>Điện thoại: <a href="tel:0356253816" class="text-dark">0356 253 816</a></p>
+                <p>Email: <a href="mailto:viethoangnguyen217@gmail.com" class="text-dark">viethoangnguyen217@gmail.com</a></p>
+                <p>Giờ làm việc ca sáng: 8:00 - 21:00 (Hàng ngày)</p>
+                <p>Giờ làm việc ca đêm: 22:00 - 6:00 (Trừ chủ nhật)</p>
+                <p>Với ca đêm chúng tôi chỉ ship đồ ăn đêm</p>
+            </div>
+            <!-- Cột 2: Dịch vụ -->
+            <div class="col-md-4 col-sm-12">
+                <h5 class="font-weight-bold mb-3">Dịch vụ</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-dark">Chính sách bảo hành</a></li>
+                    <li><a href="#" class="text-dark">Chính sách đổi trả</a></li>
+                    <li><a href="#" class="text-dark">Chính sách vận chuyển</a></li>
+                    <li><a href="#" class="text-dark">Hướng dẫn mua hàng</a></li>
+                </ul>
+            </div>
+            <!-- Cột 3: Mạng xã hội -->
+            <div class="col-md-4 col-sm-12">
+                <h5 class="font-weight-bold mb-3">Kết nối với chúng tôi</h5>
+                <p>Theo dõi Hoàng Shop trên mạng xã hội:</p>
+                <div class="d-flex">
+                    <a href="https://facebook.com" class="text-dark mr-3" target="_blank"><i class="fab fa-facebook fa-2x"></i></a>
+                    <a href="https://instagram.com" class="text-dark mr-3" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
+                    <a href="https://twitter.com" class="text-dark mr-3" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
+                    <a href="https://youtube.com" class="text-dark" target="_blank"><i class="fab fa-youtube fa-2x"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="mb-0">&copy; 2024 Hoàng Shop. Bản quyền thuộc về Hoàng Shop.</p>
+                <p>Thiết kế bởi <a href="#" class="text-dark">Đội ngũ Hoàng Shop</a></p>
+            </div>
+        </div>
+    </div>
+
+</footer>
+    <script>
+        document.querySelector('.add-to-cart-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Ngăn tải lại trang
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Sản phẩm đã được thêm vào giỏ hàng!');
+                    } else {
+                        alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi:', error);
+                    alert('Không thể thêm sản phẩm vào giỏ hàng.');
+                });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

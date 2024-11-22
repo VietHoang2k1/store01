@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thanh toán</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Thông tin thanh toán</h1>
+    <form th:action="@{/products/checkout}" method="post">
+        <div class="form-group">
+            <label for="name">Tên:</label>
+            <input type="text" id="name" name="name" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Địa chỉ:</label>
+            <input type="text" id="address" name="address" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="payment">Phương thức thanh toán:</label>
+            <select id="payment" name="payment" class="form-control">
+                <option value="credit">Thẻ tín dụng</option>
+                <option value="paypal">Paypal</option>
+            </select>
+        </div>
+        <div class="d-flex justify-content-between">
+            <a th:href="@{/products/card}" class="btn btn-secondary">Quay lại</a>
+            <button type="submit" class="btn btn-success">Xác nhận thanh toán</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
